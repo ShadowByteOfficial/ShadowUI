@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SHADOW BYTE</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #00264d, #004080);
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.4);
+    }
+
+    /* --- HEADER --- */
+    header {
+      background: rgba(13,13,15,0.65);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .highlight {
+      color: #00ffe1;
+      font-weight: 900;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: #43006e;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0;
+      transition: background 0.3s;
+    }
+
+    .btn-primary:hover {
+      background: #5c00a3;
+    }
+
+    /* --- VOLUME --- */
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .volume-icon {
+      font-size: 20px;
+      cursor: pointer;
+      background: #222;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .volume-slider {
+      width: 100px;
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+    .hero-img {
+  width: 350px; /* Smaller than original 500px */
+  max-width: 100%;
+}
+    .volume-control:hover .volume-slider,
+    .volume-control.show-slider .volume-slider {
+      display: block;
+    }
+
+    /* --- SECTIONS --- */
+    section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      padding: 80px 40px;
+      flex-wrap: wrap;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      margin: 40px;
+    }
+
+    section:nth-child(even):not(.discount) {
+      flex-direction: row-reverse;
+    }
+
+    section img {
+      max-width: 100%;
+      width: 500px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px #000;
+    }
+
+    section div { max-width: 600px; }
+
+    h2 { font-size: 2.5rem; margin-bottom: 20px; }
+
+    p { font-size: 1.1rem; color: #ddd; }
+
+    .hero-buttons { margin-top: 20px; }
+
+    /* --- FOOTER --- */
+footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 30px 40px;
+  background: rgba(20, 0, 35, 0.4); /* translucent deep purple */
+  backdrop-filter: blur(12px);      /* strong acrylic blur */
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  color: #ccc;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  border-radius: 0 0 12px 12px; /* optional: smooth bottom corners */
+}
+
+footer .shadow-byte {
+  background: linear-gradient(145deg, #a000ff, #ff00f5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+}
+
+
+    /* --- DISCOUNT SECTION --- */
+    .discount {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(145deg,#1e002a,#43006e);
+      border-radius: 12px;
+      margin: 40px;
+    }
+
+    .discount p {
+      font-size: 2.2rem;
+      color: #fff;
+    }
+
+    .discount .btn-primary {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="images/bg.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Background Video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="images/videoplayback.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">SHADOW <span class="highlight">BYTE</span></div>
+    <div class="header-actions">
+      <a href="https://discord.gg/QctMnev8fX" class="btn-primary">PURCHASE</a>
+      <div class="volume-control" id="volControl">
+        <div class="volume-icon" id="volIcon">🔊</div>
+        <input type="range" min="0" max="1" step="0.01" id="volSlider" class="volume-slider">
+      </div>
+    </div>
+  </header>
+
+  <!-- Sections -->
+  <section>
+    <div>
+      <h2>SHADOW BYTE</h2>
+      <p>EMPOWER YOUR FREE FIRE BATTLES WITH OUR PREMIUM AIMBOT & SPOOFING SOLUTIONS — SECURE, FAST & UNDETECTED.</p>
+      <div class="hero-buttons">
+        <a href="https://www.youtube.com/@ShadowByte32" class="btn-primary">WATCH</a>
+        <a href="https://discord.gg/QctMnev8fX" class="btn-primary">BUY NOW</a>
+      </div>
+    </div>
+    <img src="images/jhj.png" alt="Premium Panel" class="hero-img" />
+  </section>
+
+  <section>
+    <div>
+      <h2>EXCLUSIVE FEATURES</h2>
+      <p>UNLOCK RARE COSMETICS, EXCLUSIVE SKINS, AND ADVANCED TOOLS TO COMPLETELY TRANSFORM YOUR FREE FIRE EXPERIENCE AND STAND OUT ON THE BATTLEFIELD.</p>
+    </div>
+    <img src="images/image.png" alt="Exclusive Features" />
+  </section>
+
+  <section>
+    <div>
+      <h2>REACH THE HIGHEST RANK</h2>
+      <p>ENJOY THE HIGHEST RANK USING OUR PANEL WITHOUT RISK.</p>
+    </div>
+    <img src="images/20250718_175841.png" alt="Highest Rank" />
+  </section>
+
+  <section>
+    <div>
+      <h2>EMULATOR BYPASS 100 % SAFE</h2>
+      <p>OUR FREE FIRE EMULATOR BYPASS BY SHADOW BYTE ENSURES UNDETECTED GAMEPLAY ON BLUESTACKS, LDPLAYER, AND HD-PLAYER WITH FAST INJECTION, ANTI-BAN SECURITY, FULL UPDATE COMPATIBILITY, AND SECURE SPOOFING — PERFECT FOR SERIOUS PLAYERS SEEKING A COMPETITIVE EDGE.</p>
+    </div>
+    <img src="images/20250715_174802(1).png" alt="Cross Platform" />
+  </section>
+
+  <section>
+    <div>
+      <h2>WARRANTY</h2>
+      <p>WE BELIEVE IN THE QUALITY OF OUR PRODUCTS AND ALWAYS STRIVE TO OFFER THE BEST TO OUR CUSTOMERS. THEREFORE, WE PROVIDE A [LIFETIME] WARRANTY ON ALL OUR PRODUCTS. IF YOU ENCOUNTER ANY ISSUES OR DEFECTS WITH THE PRODUCT WITHIN THIS PERIOD, YOU CAN EXCHANGE IT FOR A SIMILAR PRODUCT. YOUR SATISFACTION IS OUR TOP PRIORITY.</p>
+    </div>
+    <img src="images/Screenshot 2025-07-15 093001.png" alt="Warranty" />
+  </section>
+
+  <section>
+    <div>
+      <h2>ABOUT SHADOW BYTE</h2>
+      <p>GAIN THE UPPER HAND IN EVERY BATTLE WITH OUR REVOLUTIONARY NINJA HEX PANEL! DESIGNED TO ELEVATE YOUR FREE FIRE GAMING EXPERIENCE, THIS TOOL PROVIDES A COMPETITIVE EDGE LIKE NEVER BEFORE. VICTORY IS NOW JUST A STEP AWAY.</p>
+    </div>
+    <img src="images/Screenshot 2025-07-15 093008.png" alt="About Shadow Byte" />
+  </section>
+
+  <section>
+    <div>
+      <h2>ADVANCED CUSTOMIZATION</h2>
+      <p>TRANSFORM YOUR GAMING EXPERIENCE WITH A CUSTOMIZABLE INTERFACE DESIGNED FOR FREE FIRE CHAMPIONS.</p>
+    </div>
+    <img src="images/Screenshot 2025-07-15 093016.png" alt="Advanced Customization" />
+  </section>
+
+  <section class="discount">
+    <div>
+      <p><strong>UP TO 50% OFF</strong></p>
+      <a href="#" class="btn-primary">BUY NOW</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+ <footer>
+  <div>
+    © 2025 <span class="shadow-byte">SHADOW BYTE</span>. ALL RIGHTS RESERVED.<br>
+    A SUBSIDIARY OF <span class="shadow-byte">SHADOW, </span>BYTE.
+  </div>
+</footer>
+
+
+  <!-- Audio Script -->
+  <script>
+    const music = document.getElementById("bgMusic");
+    const volSlider = document.getElementById("volSlider");
+    const volIcon = document.getElementById("volIcon");
+    const volControl = document.getElementById("volControl");
+
+    let hideTimeout;
+
+    function tryPlayAudio() {
+      if (music.paused) {
+        music.volume = 0.5;
+        music.play().catch(() => {});
+      }
+    }
+
+    function updateIcon() {
+      volIcon.textContent = music.muted || music.volume === 0 ? "🔇" : "🔊";
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      tryPlayAudio();
+      updateIcon();
+      volSlider.value = music.volume;
+      ['click', 'keydown', 'touchstart'].forEach(event => {
+        window.addEventListener(event, () => tryPlayAudio(), { once: true });
+      });
+    });
+
+    volSlider.addEventListener("input", () => {
+      music.volume = volSlider.value;
+      music.muted = music.volume == 0;
+      updateIcon();
+    });
+
+    volIcon.addEventListener("click", () => {
+      music.muted = !music.muted;
+      if (!music.muted && music.volume == 0) {
+        music.volume = 0.5;
+        volSlider.value = 0.5;
+      }
+      updateIcon();
+      volControl.classList.add("show-slider");
+      resetHideTimer();
+    });
+
+    volControl.addEventListener("mouseover", () => {
+      volControl.classList.add("show-slider");
+      clearTimeout(hideTimeout);
+    });
+
+    volControl.addEventListener("mouseleave", () => {
+      resetHideTimer();
+    });
+
+    function resetHideTimer() {
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        volControl.classList.remove("show-slider");
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
